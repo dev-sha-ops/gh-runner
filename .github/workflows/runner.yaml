@@ -1,0 +1,34 @@
+name: Update Runner Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Input Runner Version'
+        required: true
+        default: 'v2.311.0'
+
+permissions:
+  id-token: write
+  contents: write 
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    env:
+      ECR_REGISTRY: 999999999999.dkr.ecr.us-east-1.amazonaws.com
+      ECR_REPOSITORY: "runner"
+      IMAGE_TAG: ${{ github.sha }}
+      RUNNER_VERSION: ${{ github.event.inputs.version }}
+      AWS_REGION: us-east-1
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Docker Build and tag - RUNNER Image
+        id: build-runner-image
+        run: |
+
+          docker builder build -t $ECR_REGISTRY/$ECR_REPOSITORY:base -f Dockerfile.base .           
+          docker builder build --build-arg GH_RUNNER_VERSION=${RUNNER_VERSION} -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
