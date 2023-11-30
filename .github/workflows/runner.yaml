@@ -29,6 +29,7 @@ jobs:
       - name: Docker Build and tag - RUNNER Image
         id: build-runner-image
         run: |
-          apt install gzip tar
+          sudo apt update -y
+          sudo apt install gzip tar -y
           docker builder build -t $ECR_REGISTRY/$ECR_REPOSITORY:base -f Dockerfile.base .           
           docker builder build --build-arg GH_RUNNER_VERSION=${RUNNER_VERSION} -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
