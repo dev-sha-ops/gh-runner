@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-focal
     env:
       ECR_REGISTRY: 999999999999.dkr.ecr.us-east-1.amazonaws.com
       ECR_REPOSITORY: "runner"
